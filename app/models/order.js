@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema(
 			required: true,
 		},
 		items: [],
-		total: { virtuals : true },
+        total: Number,
         payment_info: {
             firstName: String,
             lastName: String,
@@ -23,6 +23,8 @@ const orderSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
+        // Add virtual to calculate price
+        // toObject: {virtuals: true}
 	}
 )
 
