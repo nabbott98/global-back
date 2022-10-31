@@ -3,27 +3,24 @@ const mongoose = require('mongoose')
 const paymentInfoSchema = new mongoose.Schema(
     {
         name: {
-            //bcrypt
             type: Number,
             required: true
         },
+        // bcrypt
         card_number: {
             type: String,
             required: true
         },
         expiration: {
-            //bcrypt
             type: String,
             required: true
         },
+        // bcrypt
         sec_code: {
             type: Number,
             required: true
         },
-        billing_address: {
-            type: Object,
-            required: true
-        }
+    // Add billing adddress in later
     }, {
         timestamps: true
     })
