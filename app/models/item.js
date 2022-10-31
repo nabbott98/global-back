@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 
+// Import `review` subdocument
+const commentSchema = require('./review')
+
 const itemSchema = new mongoose.Schema(
 	{
 		name: {
@@ -26,15 +29,12 @@ const itemSchema = new mongoose.Schema(
 			type: Number,
 			required: true,
 		},
-		text: {
-			type: String,
-			required: true,
-		},
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
 		},
+		reviews: [reviewSchema]
 	},
 	{
 		timestamps: true,
