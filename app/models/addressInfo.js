@@ -40,4 +40,4 @@ const addressInfoSchema = new mongoose.Schema(
 	}
 )
 
-module.exports = mongoose.model('AddressInfo', addressInfoSchema)
+module.exports = addressInfoSchema

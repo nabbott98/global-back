@@ -1,5 +1,10 @@
 const mongoose = require('mongoose')
 
+const cartSchema = require('./cart')
+const addressInfoSchema = require('./addressInfo')
+const paymentInfoSchema = require('./paymentInfo')
+
+
 const userSchema = new mongoose.Schema(
 	{
 		email: {
@@ -7,11 +12,22 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		firstName: {
+			type: String,
+			required: true,
+		},
+		lastName: {
+			type: String,
+			required: true,
+		},
 		hashedPassword: {
 			type: String,
 			required: true,
 		},
 		token: String,
+		cart: [cartSchema],
+		addressInfo: [addressInfoSchema],
+		paymentInfo: [paymentInfoSchema]
 	},
 	{
 		timestamps: true,
