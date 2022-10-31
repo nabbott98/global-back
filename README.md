@@ -2,6 +2,7 @@
 This is the global backend API repo
 
 ## Technolgies Used
+
   - [MongoDB](https://www.mongodb.com/)
     - Source-available cross-platform document-oriented database program
     - Classified as a NoSQL database program, MongoDB uses JSON-like documents with optional schemas
@@ -25,4 +26,19 @@ This is the global backend API repo
     - Cloud image storage
 
 ## Database ERD (Entity Relationship Diagram)
+
 ![Global API ERD](planning/db-erd.png)
+
+## API 
+
+### Authentication
+
+| Verb   | URI Pattern            | Controller#Action |
+|--------|------------------------|-------------------|
+| POST   | `/sign-up`             | `users#signup`    |
+| POST   | `/sign-in`             | `users#signin`    |
+| PATCH  | `/change-password/` | `users#changepw`  |
+| DELETE | `/sign-out/`        | `users#signout`   |
+
+### Items
+
