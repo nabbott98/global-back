@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 // Import `review` subdocument
-const commentSchema = require('./review')
+const reviewSchema = require('./review')
 
 const itemSchema = new mongoose.Schema(
 	{
