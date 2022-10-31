@@ -21,7 +21,7 @@ router.get('/addressInfo', requireToken, (req, res, next) => {
 
 // CREATE
 // POST
-router.post('/addressInfo', (req, res, next) => {
+router.post('/addressInfo', requireToken, (req, res, next) => {
 	req.body.addressInfo.owner = req.user.id
 	AddressInfo.create(req.body.addressInfo)
 		.then((address) => {
