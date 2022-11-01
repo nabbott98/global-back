@@ -93,8 +93,6 @@ router.patch('/paymentInfos/:userId/:paymentInfoId', requireToken, (req, res, ne
 // DELETE /paymentInfos/5a7db6c74d55bc51bdf39793
 router.delete('/paymentInfos/:userId/:paymentInfoId', requireToken, (req, res, next) => {
     const { userId, paymentInfoId } = req.params
-
-	console.log('Nick was Here')
     // find the user
     User.findById(userId)
         .then(handle404)

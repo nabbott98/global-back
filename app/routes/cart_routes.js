@@ -96,8 +96,6 @@ router.patch('/carts/:userId/:cartId', requireToken, (req, res, next) => {
 // DELETE /carts/5a7db6c74d55bc51bdf39793
 router.delete('/carts/:userId/:cartId', requireToken, (req, res, next) => {
     const { userId, cartId } = req.params
-
-	console.log('Nick was Here')
     // find the user
     User.findById(userId)
         .then(handle404)
