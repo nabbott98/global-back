@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const paymentInfoSchema = new mongoose.Schema(
     {
         name: {
-            type: Number,
+            type: String,
             required: true
         },
         // bcrypt
@@ -25,4 +25,4 @@ const paymentInfoSchema = new mongoose.Schema(
         timestamps: true
     })
 
-module.exports = paymentInfoSchema
+module.exports = mongoose.model('PaymentInfo', paymentInfoSchema)
