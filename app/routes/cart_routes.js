@@ -57,6 +57,7 @@ router.get('/carts', requireToken, (req, res, next) => {
 router.post('/carts', requireToken, (req, res, next) => {
 	// find user by id
 	User.findOne({ _id: req.user.id })
+		.then(handle404)
 		.then((user) => {
 			// push req.body into cart and it creates since it is a subdocument
 			user.cart.push(req.body)
@@ -68,44 +69,45 @@ router.post('/carts', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// UPDATE
-// PATCH /carts/5a7db6c74d55bc51bdf39793
-router.patch('/carts/:id', requireToken, removeBlanks, (req, res, next) => {
-	// if the client attempts to change the `owner` property by including a new
-	// owner, prevent that by deleting that key/value pair
-	delete req.body.cart.owner
 
-	Cart.findById(req.params.id)
-		.then(handle404)
-		.then((cart) => {
-			// pass the `req` object and the Mongoose record to `requireOwnership`
-			// it will throw an error if the current user isn't the owner
-			requireOwnership(req, cart)
+// UPDATE a cart item
+// PATCH -> /carts/userId/cartId
+router.patch('/carts/:userId/:cartId', requireToken, (req, res, next) => {
+    const { userId, cartId } = req.params
+    // find the user
+    User.findById(userId)
+        .then(handle404)
+        .then(user => {
+            // get the specific cart Item
+            const theCartItem = user.cart.id(cartId)
+            // update that cart item with the req body
+            theCartItem.set(req.body)
 
-			// pass the result of Mongoose's `.update` to the next `.then`
-			return cart.updateOne(req.body.cart)
-		})
-		// if that succeeded, return 204 and no JSON
-		.then(() => res.sendStatus(204))
-		// if an error occurs, pass it to the handler
-		.catch(next)
+            return user.save()
+        })
+        .then((user) => res.sendStatus(204))
+        .catch(next)
 })
 
 // DESTROY
 // DELETE /carts/5a7db6c74d55bc51bdf39793
-router.delete('/carts/:id', requireToken, (req, res, next) => {
-	Cart.findById(req.params.id)
-		.then(handle404)
-		.then((cart) => {
-			// throw an error if current user doesn't own `cart`
-			requireOwnership(req, cart)
-			// delete the cart ONLY IF the above didn't throw
-			cart.deleteOne()
-		})
-		// send back 204 and no content if the deletion succeeded
-		.then(() => res.sendStatus(204))
-		// if an error occurs, pass it to the handler
-		.catch(next)
+router.delete('/carts/:userId/:cartId', requireToken, (req, res, next) => {
+    const { userId, cartId } = req.params
+
+	console.log('Nick was Here')
+    // find the user
+    User.findById(userId)
+        .then(handle404)
+        .then(user => {
+            // get the specific cart Item
+            const theCartItem = user.cart.id(cartId)
+            // update that cart item with the req body
+            theCartItem.remove()
+
+            return user.save()
+        })
+        .then((user) => res.sendStatus(204))
+        .catch(next)
 })
 
 module.exports = router
