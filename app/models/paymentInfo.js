@@ -8,7 +8,7 @@ const paymentInfoSchema = new mongoose.Schema(
         },
         // bcrypt
         card_number: {
-            type: String,
+            type: Number,
             required: true
         },
         expiration: {
@@ -25,4 +25,4 @@ const paymentInfoSchema = new mongoose.Schema(
         timestamps: true
     })
 
-module.exports = mongoose.model('PaymentInfo', paymentInfoSchema)
+module.exports = paymentInfoSchema
