@@ -32,39 +32,38 @@ const router = express.Router()
 // INDEX
 // GET /carts
 router.get('/carts', requireToken, (req, res, next) => {
-	Cart.find()
-		.then((carts) => {
-			// `carts` will be an array of Mongoose documents
-			// we want to convert each one to a POJO, so we use `.map` to
-			// apply `.toObject` to each one
-			return carts.map((cart) => cart.toObject())
-		})
-		// respond with status 200 and JSON of the carts
-		.then((carts) => res.status(200).json({ carts: carts }))
-		// if an error occurs, pass it to the handler
+	User.findOne({ _id: req.user.id })
+		.then(handle404)
+		.then((user) => res.status(200).json({ cart: user.cart.toObject() }))
+		// if `findById` is succesful, respond with 200 and "item" JSON
 		.catch(next)
 })
 
 // SHOW
+//^ Dont think we need a show route for the cart
 // GET /carts/5a7db6c74d55bc51bdf39793
-router.get('/carts/:id', requireToken, (req, res, next) => {
-	// req.params.id will be set based on the `:id` in the route
-	Cart.findById(req.params.id)
-		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "cart" JSON
-		.then((cart) => res.status(200).json({ cart: cart.toObject() }))
-		// if an error occurs, pass it to the handler
-		.catch(next)
-})
+// router.get('/carts/:id', requireToken, (req, res, next) => {
+// 	// req.params.id will be set based on the `:id` in the route
+// 	Cart.findById(req.params.id)
+// 		.then(handle404)
+// 		// if `findById` is succesful, respond with 200 and "cart" JSON
+// 		.then((cart) => res.status(200).json({ cart: cart.toObject() }))
+// 		// if an error occurs, pass it to the handler
+// 		.catch(next)
+// })
 
 // CREATE
 // POST /carts
 router.post('/carts', requireToken, (req, res, next) => {
+	// find user by id
 	User.findOne({ _id: req.user.id })
 		.then((user) => {
+			// push req.body into cart and it creates since it is a subdocument
 			user.cart.push(req.body)
+			// return updated user
 			return user.save()
 		})
+		// send 201 status to server and return the user as the response
 		.then(user => res.status(201).json({ user: user }))
 		.catch(next)
 })
