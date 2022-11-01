@@ -46,7 +46,7 @@ router.get('/paymentInfo/:id', requireToken, (req, res, next) => {
 // UPDATE
 // PATCH
 router.patch('/paymentInfo/:id', requireToken, removeBlanks, (req, res, next) => {
-	delete req.body.paymentInfo.owner
+	// delete req.body.paymentInfo.owner
 	PaymentInfo.findById(req.params.id)
 		.then(handle404)
 		.then((payment) => {
