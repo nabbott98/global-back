@@ -54,9 +54,12 @@ router.get('/carts', requireToken, (req, res, next) => {
 
 // CREATE
 // POST /carts
-router.post('/carts', requireToken, (req, res, next) => {
+router.post('/carts/:userId/:itemId', requireToken, (req, res, next) => {
 	// find user by id
-	User.findOne({ _id: req.user.id })
+	const { userId, itemId } = req.params
+	req.body.itemId = itemId
+
+	User.findOne({ _id: userId })
 		.then(handle404)
 		.then((user) => {
 			// push req.body into cart and it creates since it is a subdocument
@@ -85,7 +88,7 @@ router.patch('/carts/:userId/:cartId', requireToken, (req, res, next) => {
 
             return user.save()
         })
-        .then((user) => res.sendStatus(204))
+        .then(() => res.sendStatus(204))
         .catch(next)
 })
 
@@ -101,7 +104,6 @@ router.delete('/carts/:userId/:cartId', requireToken, (req, res, next) => {
         .then(user => {
             // get the specific cart Item
             const theCartItem = user.cart.id(cartId)
-            // update that cart item with the req body
             theCartItem.remove()
 
             return user.save()
