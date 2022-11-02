@@ -40,16 +40,20 @@ router.get('/addressInfos', requireToken, (req, res, next) => {
 })
 
 // SHOW
-//^ I think we need a show route for the addressInfo
-// GET /addressInfos/5a7db6c74d55bc51bdf39793
+// GET /addressInfos/
 router.get('/addressInfos/:id', requireToken, (req, res, next) => {
-	// req.params.id will be set based on the `:id` in the route
-	AddressInfo.findById(req.params.id)
-		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "addressInfo" JSON
-		.then((addressInfo) => res.status(200).json({ addressInfo: addressInfo.toObject() }))
-		// if an error occurs, pass it to the handler
-		.catch(next)
+    const { id } = req.params
+    // find the user
+    User.findOne({ _id: req.user.id })
+        .then(handle404)
+        .then(user => {
+            // get the specific addressInfo Item
+            addressInfoItem = user.addressInfo.id(id)
+            // update that addressInfo item with the req body
+            return addressInfoItem
+        })
+        .then((addressInfoItem) => res.status(200).json({ addressInfoItem: addressInfoItem.toObject() }))
+        .catch(next)
 })
 
 // CREATE
