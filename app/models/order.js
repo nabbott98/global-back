@@ -1,25 +1,18 @@
 const mongoose = require('mongoose')
+const addressInfoSchema = require('./addressInfo')
+const paymentInfoSchema = require('./paymentInfo')
 
 const orderSchema = new mongoose.Schema(
 	{
 		owner: {
-			type: String,
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
 			required: true,
 		},
 		items: [],
         total: Number,
-        payment_info: {
-            firstName: String,
-            lastName: String,
-            cardNumber: Number,
-            required: true,
-        },
-        shipping_address: {
-            postalCode: Number,
-            address: String,
-            required: true,
-        },
-        order_date: String,
+		addressInfo: [addressInfoSchema],
+		paymentInfo: [paymentInfoSchema]
 	},
 	{
 		timestamps: true,

@@ -5,7 +5,7 @@ const passport = require('passport')
 
 // pull in Mongoose model for orders
 const Order = require('../models/order')
-
+const Item = require('../models/item')
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
@@ -19,6 +19,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { order: { title: '', text: 'foo' } } -> { order: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
+
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -57,12 +58,37 @@ router.get('/orders/:id', requireToken, (req, res, next) => {
 
 // CREATE
 // POST /orders
-router.post('/orders', requireToken, (req, res, next) => {
-	// set owner of new order to be current user
+router.post('/orders/:paymentId/:addressId', requireToken, (req, res, next) => {
+	const { paymentId, addressId } = req.params
+	req.body.items = []
+	req.body.total = 0
+	User.findOne({ _id: req.user.id })
+        .then(handle404)
+        .then(user => {
+            // get the specific addressInfo Item
+            req.body.addressInfo = user.addressInfo.id(addressId)
+			req.body.paymentInfo = user.addressInfo.id(paymentId)
+            // update that addressInfo item with the req body
+			cart = user.cart
+			cart.forEach(element => {
+				Item.findOne(element.itemId)
+					// .then(handle404)
+					.then(cartItem => {
+						req.body.items.push(cartItem)
+						req.body.total += cartItem.price
+						return req
+					})
+					.catch(next)
+			})
+            return req
+        })
+		.then (req => {
+			Order.create(req.body)
+		})
 
 })
 
-// index that shows only the user's apods
+// index that shows only the user's orders
 router.get('/orders/mine', requireToken, (req, res) => {
     // find the apods, by ownership
     Order.find({ owner: req.session.userId })
