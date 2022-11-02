@@ -163,4 +163,17 @@ router.get('/user', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+// PATCH USER
+router.patch('/user', requireToken, (req, res, next) => {
+    // find the user
+    User.findOne({ _id: req.user.id })
+        .then(handle404)
+        .then(user => {
+            user.set(req.body)
+            return user.save()
+        })
+        .then(() => res.sendStatus(204))
+        .catch(next)
+})
+
 module.exports = router
