@@ -7,14 +7,14 @@ const addressInfoSchema = new mongoose.Schema(
 			required: true,
 		},
 		phoneNumber: {
-				type: Number,
+				type: String,
 				required: true,
 			},
 		streetAddress: {
 				type: String,
 				required: true,
 			},
-			aptAddress: String,
+		aptAddress: String,
 		city: {
 				type: String,
 				required: true,
@@ -24,16 +24,11 @@ const addressInfoSchema = new mongoose.Schema(
 				required: true,
 			},
 		zip: {
-				type: Number,
+				type: String,
 				required: true,
 			},
-		default: Boolean,
-		deliveryInstructions: String,
-		owner: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
-			required: true,
-		}
+		primary: Boolean,
+		deliveryInstructions: String
 	},
 	{
 		timestamps: true,
