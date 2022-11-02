@@ -86,6 +86,7 @@ router.post('/orders/:paymentId/:addressId', requireToken, (req, res, next) => {
 			Order.create(req.body)
 		})
 		.then((order) => res.status(200).json({ order: order.toObject() }))
+		.catch(next)
 })
 
 // index that shows only the user's orders
