@@ -172,7 +172,7 @@ router.patch('/user', requireToken, (req, res, next) => {
             user.set(req.body)
             return user.save()
         })
-        .then(() => res.sendStatus(204))
+        .then((user) => res.status(200).json({ user: user.toObject() }))
         .catch(next)
 })
 
