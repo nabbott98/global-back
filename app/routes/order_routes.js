@@ -29,19 +29,19 @@ const router = express.Router()
 
 // INDEX
 // GET /orders
-router.get('/orders', requireToken, (req, res, next) => {
-	Order.find()
-		.then((orders) => {
-			// `orders` will be an array of Mongoose documents
-			// we want to convert each one to a POJO, so we use `.map` to
-			// apply `.toObject` to each one
-			return orders.map((order) => order.toObject())
-		})
-		// respond with status 200 and JSON of the orders
-		.then((orders) => res.status(200).json({ orders: orders }))
-		// if an error occurs, pass it to the handler
-		.catch(next)
-})
+// router.get('/orders', requireToken, (req, res, next) => {
+// 	Order.find()
+// 		.then((orders) => {
+// 			// `orders` will be an array of Mongoose documents
+// 			// we want to convert each one to a POJO, so we use `.map` to
+// 			// apply `.toObject` to each one
+// 			return orders.map((order) => order.toObject())
+// 		})
+// 		// respond with status 200 and JSON of the orders
+// 		.then((orders) => res.status(200).json({ orders: orders }))
+// 		// if an error occurs, pass it to the handler
+// 		.catch(next)
+// })
 
 // SHOW
 // GET /orders/5a7db6c74d55bc51bdf39793
@@ -62,5 +62,18 @@ router.post('/orders', requireToken, (req, res, next) => {
 
 })
 
-// UPDATE
-// PATCH /orders/:orderId
+// index that shows only the user's apods
+router.get('/orders/mine', requireToken, (req, res) => {
+    // find the apods, by ownership
+    Order.find({ owner: req.session.userId })
+    	// then display the order
+		.then((orders) => {
+			// `orders` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return orders.map((order) => order.toObject())
+		})
+		.then((orders) => res.status(200).json({ orders: orders }))
+    	// or throw an error if there is one
+        .catch(error => res.json(error))
+})
