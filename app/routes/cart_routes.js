@@ -39,19 +39,6 @@ router.get('/carts', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// SHOW
-//^ Dont think we need a show route for the cart
-// GET /carts/5a7db6c74d55bc51bdf39793
-// router.get('/carts/:id', requireToken, (req, res, next) => {
-// 	// req.params.id will be set based on the `:id` in the route
-// 	Cart.findById(req.params.id)
-// 		.then(handle404)
-// 		// if `findById` is succesful, respond with 200 and "cart" JSON
-// 		.then((cart) => res.status(200).json({ cart: cart.toObject() }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
-
 // CREATE
 // POST /carts
 router.post('/carts/:userId/:itemId', requireToken, (req, res, next) => {
@@ -93,7 +80,7 @@ router.patch('/carts/:userId/:cartId', requireToken, (req, res, next) => {
 })
 
 // DESTROY
-// DELETE /carts/5a7db6c74d55bc51bdf39793
+// DELETE /carts/userId/cartId
 router.delete('/carts/:userId/:cartId', requireToken, (req, res, next) => {
     const { userId, cartId } = req.params
     // find the user
