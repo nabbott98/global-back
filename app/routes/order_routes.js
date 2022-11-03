@@ -75,8 +75,9 @@ router.post('/orders/:paymentId/:addressId', requireToken, (req, res, next) => {
 					// .then(handle404)
 					.then(cartItem => {
 						req.body.items.push(cartItem)
-						req.body.total += cartItem.price
-						return req
+						req.body.total += cartItem.price * element.quantity
+						cartItem.stock -= element.quantity
+						return req, cartItem.save()
 					})
 					.catch(next)
 			})
