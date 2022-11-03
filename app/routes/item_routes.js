@@ -44,6 +44,24 @@ router.get('/items', (req, res, next) => {
 		.catch(next)
 })
 
+// INDEX of that Users items
+//* route should not require token
+// GET /items
+router.get('/items/:userId', (req, res, next) => {
+	Item.find(req.params.userId)
+		.then((items) => {
+			// `items` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return items.map((item) => item.toObject())
+		})
+		// respond with status 200 and JSON of the items
+		.then((items) => res.status(200).json({ items: items }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+
 // SHOW
 //* route should not require token
 // GET /items/5a7db6c74d55bc51bdf39793
