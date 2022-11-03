@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const addressInfoSchema = require('./addressInfo')
-const paymentInfoSchema = require('./paymentInfo')
 
 const orderSchema = new mongoose.Schema(
 	{
