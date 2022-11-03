@@ -17,6 +17,13 @@ const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
 
+// this is a collection of methods that help us detect situations when we need
+// to throw a custom error
+const customErrors = require('../../lib/custom_errors')
+
+// we'll use this function to send 404 when non-existant document is requested
+const handle404 = customErrors.handle404
+
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `res.user`
@@ -162,6 +169,28 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 		.save()
 		.then(() => res.sendStatus(204))
 		.catch(next)
+})
+
+// GET USER /user
+router.get('/user', requireToken, (req, res, next) => {
+	User.findOne({ _id: req.user.id })
+		.then(handle404)
+		.then((user) => res.status(200).json({ user: user.toObject() }))
+		// if `findById` is succesful, respond with 200 and "item" JSON
+		.catch(next)
+})
+
+// PATCH USER
+router.patch('/user', requireToken, (req, res, next) => {
+    // find the user
+    User.findOne({ _id: req.body.user.id })
+        .then(handle404)
+        .then(user => {
+            user.set(req.body.user)
+            return user.save()
+        })
+        .then((user) => res.status(200).json({ user: user.toObject() }))
+        .catch(next)
 })
 
 module.exports = router

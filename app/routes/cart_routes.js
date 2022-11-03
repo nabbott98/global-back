@@ -31,7 +31,7 @@ const router = express.Router()
 
 // INDEX
 // GET /carts
-router.get('/carts', requireToken, (req, res, next) => {
+router.get('/cart', requireToken, (req, res, next) => {
 	User.findOne({ _id: req.user.id })
 		.then(handle404)
 		.then((user) => res.status(200).json({ cart: user.cart.toObject() }))
@@ -39,22 +39,9 @@ router.get('/carts', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// SHOW
-//^ Dont think we need a show route for the cart
-// GET /carts/5a7db6c74d55bc51bdf39793
-// router.get('/carts/:id', requireToken, (req, res, next) => {
-// 	// req.params.id will be set based on the `:id` in the route
-// 	Cart.findById(req.params.id)
-// 		.then(handle404)
-// 		// if `findById` is succesful, respond with 200 and "cart" JSON
-// 		.then((cart) => res.status(200).json({ cart: cart.toObject() }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
-
 // CREATE
 // POST /carts
-router.post('/carts/:userId/:itemId', requireToken, (req, res, next) => {
+router.post('/cart/:userId/:itemId', requireToken, (req, res, next) => {
 	// find user by id
 	const { userId, itemId } = req.params
 	req.body.itemId = itemId
@@ -75,7 +62,7 @@ router.post('/carts/:userId/:itemId', requireToken, (req, res, next) => {
 
 // UPDATE a cart item
 // PATCH -> /carts/userId/cartId
-router.patch('/carts/:userId/:cartId', requireToken, (req, res, next) => {
+router.patch('/cart/:userId/:cartId', requireToken, (req, res, next) => {
     const { userId, cartId } = req.params
     // find the user
     User.findById(userId)
@@ -94,10 +81,9 @@ router.patch('/carts/:userId/:cartId', requireToken, (req, res, next) => {
 
 // DESTROY
 // DELETE /carts/5a7db6c74d55bc51bdf39793
-router.delete('/carts/:userId/:cartId', requireToken, (req, res, next) => {
-    const { userId, cartId } = req.params
+router.delete('/cart/:userId/:cartId', requireToken, (req, res, next) => {
 
-	console.log('Nick was Here')
+    const { userId, cartId } = req.params
     // find the user
     User.findById(userId)
         .then(handle404)

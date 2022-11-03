@@ -43,13 +43,18 @@ router.get('/paymentInfos', requireToken, (req, res, next) => {
 //^ Dont think we need a show route for the paymentInfo
 // GET /paymentInfos/5a7db6c74d55bc51bdf39793
 router.get('/paymentInfos/:id', requireToken, (req, res, next) => {
-	// req.params.id will be set based on the `:id` in the route
-	PaymentInfo.findById(req.params.id)
-		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "paymentInfo" JSON
-		.then((paymentInfo) => res.status(200).json({ paymentInfo: paymentInfo.toObject() }))
-		// if an error occurs, pass it to the handler
-		.catch(next)
+    const { id } = req.params
+    // find the user
+    User.findOne({ _id: req.user.id })
+        .then(handle404)
+        .then(user => {
+            // get the specific paymentInfo Item
+            paymentInfoItem = user.paymentInfo.id(id)
+            // update that paymentInfo item with the req body
+            return paymentInfoItem
+        })
+        .then((paymentInfoItem) => res.status(200).json({ paymentInfoItem: paymentInfoItem.toObject() }))
+        .catch(next)
 })
 
 // CREATE
@@ -93,8 +98,6 @@ router.patch('/paymentInfos/:userId/:paymentInfoId', requireToken, (req, res, ne
 // DELETE /paymentInfos/5a7db6c74d55bc51bdf39793
 router.delete('/paymentInfos/:userId/:paymentInfoId', requireToken, (req, res, next) => {
     const { userId, paymentInfoId } = req.params
-
-	console.log('Nick was Here')
     // find the user
     User.findById(userId)
         .then(handle404)
