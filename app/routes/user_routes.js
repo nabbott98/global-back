@@ -183,6 +183,7 @@ router.get('/user', requireToken, (req, res, next) => {
 // PATCH USER
 router.patch('/user', requireToken, (req, res, next) => {
     // find the user
+// Added body to
     User.findOne({ _id: req.body.user.id })
         .then(handle404)
         .then(user => {

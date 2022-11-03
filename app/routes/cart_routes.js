@@ -6,6 +6,7 @@ const passport = require('passport')
 // pull in Mongoose model for carts
 const Cart = require('../models/cart')
 const User = require('../models/user')
+const Item = require('../models/item')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -21,6 +22,7 @@ const requireOwnership = customErrors.requireOwnership
 // { cart: { title: '', text: 'foo' } } -> { cart: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
 const { serializeUser } = require('passport')
+const item = require('../models/item')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -96,6 +98,38 @@ router.delete('/cart/:userId/:cartId', requireToken, (req, res, next) => {
         })
         .then((user) => res.sendStatus(204))
         .catch(next)
+})
+
+
+// Check cart status
+// GET /cart/status
+router.get('/cart/status', requireToken, (req, res, next) => {
+    cartStatus = []
+	User.findOne({ _id: req.user.id })
+		.then(handle404)
+        .then((user) => {
+            user.cart.forEach(element => {
+                Item.findById(element.itemId)
+                    .then(item => {
+                        if(item.stock >= element.quantity){
+                            cartStatus.push(true)
+                            console.log('0: ', cartStatus)
+                            return cartStatus
+                        } else {
+                            cartStatus.push(false)
+                            console.log('0: ', cartStatus)
+                            return cartStatus
+                        }
+                    })
+                // console.log('1: ', cartStatus)
+                // return cartStatus
+            })
+            // console.log('2: ', cartStatus)
+            // return cartStatus
+        })
+		.then(() => res.status(200).json({ cartStatus: cartStatus }))
+		// if `findById` is succesful, respond with 200 and "item" JSON
+		.catch(next)
 })
 
 module.exports = router
