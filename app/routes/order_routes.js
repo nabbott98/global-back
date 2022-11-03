@@ -5,7 +5,9 @@ const passport = require('passport')
 
 // pull in Mongoose model for orders
 const Order = require('../models/order')
+
 const Item = require('../models/item')
+
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
@@ -30,19 +32,20 @@ const router = express.Router()
 
 // INDEX
 // GET /orders
-// router.get('/orders', requireToken, (req, res, next) => {
-// 	Order.find()
-// 		.then((orders) => {
-// 			// `orders` will be an array of Mongoose documents
-// 			// we want to convert each one to a POJO, so we use `.map` to
-// 			// apply `.toObject` to each one
-// 			return orders.map((order) => order.toObject())
-// 		})
-// 		// respond with status 200 and JSON of the orders
-// 		.then((orders) => res.status(200).json({ orders: orders }))
-// 		// if an error occurs, pass it to the handler
-// 		.catch(next)
-// })
+
+router.get('/orders', requireToken, (req, res, next) => {
+	Order.find()
+		.then((orders) => {
+			// `orders` will be an array of Mongoose documents
+			// we want to convert each one to a POJO, so we use `.map` to
+			// apply `.toObject` to each one
+			return orders.map((order) => order.toObject())
+		})
+		// respond with status 200 and JSON of the orders
+		.then((orders) => res.status(200).json({ orders: orders }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 // SHOW
 // GET /orders/5a7db6c74d55bc51bdf39793
@@ -58,6 +61,15 @@ router.get('/orders/:id', requireToken, (req, res, next) => {
 
 // CREATE
 // POST /orders
+
+router.post('/orders', requireToken, (req, res, next) => {
+	// set owner of new order to be current user
+
+})
+
+// UPDATE
+// PATCH /orders/:orderId
+
 // router.post('/orders/:paymentId/:addressId', requireToken, (req, res, next) => {
 // 	const { paymentId, addressId } = req.params
 // 	req.body.items = []

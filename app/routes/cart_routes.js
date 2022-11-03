@@ -100,6 +100,7 @@ router.delete('/cart/:userId/:cartId', requireToken, (req, res, next) => {
         .catch(next)
 })
 
+
 // Check cart status
 // GET /cart/status
 router.get('/cart/status', requireToken, (req, res, next) => {

@@ -5,12 +5,12 @@ const paymentInfoSchema = require('./paymentInfo')
 const orderSchema = new mongoose.Schema(
 	{
 		owner: {
-			type: mongoose.Schema.Types.ObjectId,
+			type: String,
 			ref: 'User',
 			required: true,
 		},
 		items: [],
-        total: Number,
+    total: Number,
 		addressInfo: addressInfoSchema
 	},
 	{

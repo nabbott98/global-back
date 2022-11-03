@@ -143,6 +143,23 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 		// pass any errors along to the error handler
 		.catch(next)
 })
+// CHANGE username
+router.patch('/change-username/:id', requireToken, (req, res, next) => {
+	let user
+	// `req.user` will be determined by decoding the token payload
+	User.findById(req.user.id)
+	.then(handle404)
+	.then((user) => {
+		return user.updateOne(req.body.user)
+	})
+	// if that succeeded, return 204 and no JSON
+	.then(() => res.sendStatus(204))
+	// if an error occurs, pass it to the handler
+	.catch(next)
+})
+
+
+
 
 router.delete('/sign-out', requireToken, (req, res, next) => {
 	// create a new random token for the user, invalidating the current one
@@ -166,10 +183,11 @@ router.get('/user', requireToken, (req, res, next) => {
 // PATCH USER
 router.patch('/user', requireToken, (req, res, next) => {
     // find the user
-    User.findOne({ _id: req.user.id })
+// Added body to
+    User.findOne({ _id: req.body.user.id })
         .then(handle404)
         .then(user => {
-            user.set(req.body)
+            user.set(req.body.user)
             return user.save()
         })
         .then((user) => res.status(200).json({ user: user.toObject() }))
