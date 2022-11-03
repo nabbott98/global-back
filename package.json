@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend Mongoose Express API for Global eCommerce App",
   "main": "server.js",
+  "proxy": "http://localhost:4242/",
   "scripts": {
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +20,7 @@
     "mongodb": "^4.2.1",
     "mongoose": "^6.1.1",
     "passport": "^0.5.0",
-    "passport-http-bearer": "^1.0.1"
+    "passport-http-bearer": "^1.0.1",
+    "stripe": "^10.15.0"
   }
 }
