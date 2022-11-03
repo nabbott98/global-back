@@ -58,37 +58,36 @@ router.get('/orders/:id', requireToken, (req, res, next) => {
 
 // CREATE
 // POST /orders
-router.post('/orders/:paymentId/:addressId', requireToken, (req, res, next) => {
-	const { paymentId, addressId } = req.params
-	req.body.items = []
-	req.body.total = 0
-	User.findOne({ _id: req.user.id })
-        .then(handle404)
-        .then(user => {
-            // get the specific addressInfo Item
-            req.body.addressInfo = user.addressInfo.id(addressId)
-			req.body.paymentInfo = user.addressInfo.id(paymentId)
-            // update that addressInfo item with the req body
-			cart = user.cart
-			cart.forEach(element => {
-				Item.findOne(element.itemId)
-					// .then(handle404)
-					.then(cartItem => {
-						req.body.items.push(cartItem)
-						req.body.total += cartItem.price * element.quantity
-						cartItem.stock -= element.quantity
-						return req, cartItem.save()
-					})
-					.catch(next)
-			})
-            return req
-        })
-		.then (req => {
-			Order.create(req.body)
-		})
-		.then((order) => res.status(200).json({ order: order.toObject() }))
-		.catch(next)
-})
+// router.post('/orders/:paymentId/:addressId', requireToken, (req, res, next) => {
+// 	const { paymentId, addressId } = req.params
+// 	req.body.items = []
+// 	req.body.total = 0
+// 	User.findOne({ _id: req.user.id })
+//         .then(handle404)
+//         .then(user => {
+//             // get the specific addressInfo Item
+//             req.body.addressInfo = user.addressInfo.id(addressId)
+//             // update that addressInfo item with the req body
+// 			cart = user.cart
+// 			cart.forEach(element => {
+// 				Item.findOne(element.itemId)
+// 					// .then(handle404)
+// 					.then(cartItem => {
+// 						req.body.items.push(cartItem)
+// 						req.body.total += cartItem.price * element.quantity
+// 						cartItem.stock -= element.quantity
+// 						return req, cartItem.save()
+// 					})
+// 					.catch(next)
+// 			})
+//             return req
+//         })
+// 		.then (req => {
+// 			Order.create(req.body)
+// 		})
+// 		.then((order) => res.status(200).json({ order: order.toObject() }))
+// 		.catch(next)
+// })
 
 // index that shows only the user's orders
 router.get('/orders/mine', requireToken, (req, res) => {

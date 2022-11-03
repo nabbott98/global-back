@@ -11,8 +11,7 @@ const orderSchema = new mongoose.Schema(
 		},
 		items: [],
         total: Number,
-		addressInfo: addressInfoSchema,
-		paymentInfo: paymentInfoSchema
+		addressInfo: addressInfoSchema
 	},
 	{
 		timestamps: true,
