@@ -43,12 +43,12 @@ router.get('/cart', requireToken, (req, res, next) => {
 
 // CREATE
 // POST /carts
-router.post('/cart/:userId/:itemId', requireToken, (req, res, next) => {
+router.post('/cart/:itemId', requireToken, (req, res, next) => {
 	// find user by id
-	const { userId, itemId } = req.params
+	const { itemId } = req.params
 	req.body.itemId = itemId
 
-	User.findOne({ _id: userId })
+	User.findOne({ _id: req.user.id })
 		.then(handle404)
 		.then((user) => {
 			// push req.body into cart and it creates since it is a subdocument
@@ -64,10 +64,10 @@ router.post('/cart/:userId/:itemId', requireToken, (req, res, next) => {
 
 // UPDATE a cart item
 // PATCH -> /carts/userId/cartId
-router.patch('/cart/:userId/:cartId', requireToken, (req, res, next) => {
-    const { userId, cartId } = req.params
+router.patch('/cart/:cartId', requireToken, (req, res, next) => {
+    const { cartId } = req.params
     // find the user
-    User.findById(userId)
+	User.findOne({ _id: req.user.id })
         .then(handle404)
         .then(user => {
             // get the specific cart Item
@@ -83,11 +83,11 @@ router.patch('/cart/:userId/:cartId', requireToken, (req, res, next) => {
 
 // DESTROY
 // DELETE /carts/5a7db6c74d55bc51bdf39793
-router.delete('/cart/:userId/:cartId', requireToken, (req, res, next) => {
+router.delete('/cart/:cartId', requireToken, (req, res, next) => {
 
-    const { userId, cartId } = req.params
+    const { cartId } = req.params
     // find the user
-    User.findById(userId)
+	User.findOne({ _id: req.user.id })
         .then(handle404)
         .then(user => {
             // get the specific cart Item
