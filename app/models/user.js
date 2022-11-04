@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 const cartSchema = require('./cart')
 const addressInfoSchema = require('./addressInfo')
-const paymentInfoSchema = require('./paymentInfo')
 
 
 const userSchema = new mongoose.Schema(
@@ -27,7 +26,6 @@ const userSchema = new mongoose.Schema(
 		token: String,
 		cart: [cartSchema],
 		addressInfo: [addressInfoSchema],
-		paymentInfo: [paymentInfoSchema]
 	},
 	{
 		timestamps: true,
