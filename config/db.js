@@ -15,7 +15,10 @@ const database = {
 const localDb = process.env.TESTENV ? database.test : database.development
 
 // Environment variable MONGODB_URI will be available in
-// heroku production evironment otherwise use test or development db
+// production evironment otherwise use test or development db
 const currentDb = process.env.MONGODB_URI || localDb
 
+// mongodb+srv://mongoDbUser:userpassword@organizationname0.j6ixp.mongodb.net/databasename?retryWrites=true&w=majority
+
 module.exports = currentDb
+
