@@ -1,5 +1,4 @@
 # Global API
-This is the global backend API repo
 
 ## Technolgies Used
 
