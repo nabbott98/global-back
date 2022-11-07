@@ -20,6 +20,7 @@ const requireOwnership = customErrors.requireOwnership
 
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { cart: { title: '', text: 'foo' } } -> { cart: { text: 'foo' } }
+//make sure we're removing or commenting out any unused code 
 const removeBlanks = require('../../lib/remove_blank_fields')
 const { serializeUser } = require('passport')
 const item = require('../models/item')
