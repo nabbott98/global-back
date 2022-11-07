@@ -57,7 +57,7 @@ router.post('/cart/:itemId', requireToken, (req, res, next) => {
 			return user.save()
 		})
 		// send 201 status to server and return the user as the response
-		.then(user => res.status(201).json({ user: user }))
+		.then(user => res.status(201).json({ cart: cart }))
 		.catch(next)
 })
 
